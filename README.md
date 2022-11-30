@@ -12,7 +12,7 @@ O intuito desse projeto é estudar e aplicar noções básicas de criação de u
 <h2>💻 Tecnologias</h2>
 
 #### Java
-📕 RESTApi<br>
+📕 RestAPI<br>
 📕 Spring Data<br>
 📕 Spring MVC<br>
 📕 JPA
