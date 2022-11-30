@@ -28,8 +28,7 @@ public class TourRating {
     @Size(max = 255)
     private String comment;
 
-    public TourRating(String id, String tourId, Integer customerId, Integer score, String comment) {
-        this.id = id;
+    public TourRating(String tourId, Integer customerId, Integer score, String comment) {
         this.tourId = tourId;
         this.customerId = customerId;
         this.score = score;
