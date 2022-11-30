@@ -1,10 +1,12 @@
 <h1 align="center">
-  <br>⛺Explore California Web API
+  ⛺<br>Explore California Web API
 </h1>
 
 <h2>💡 Objetivo</h2>
 
-Criar microsserviço para disponibilizar os pacotes e a lista de tours extraidos do site https://explorecalifornia.org/tours.htm.
+Microsserviço para disponibilizar os pacotes e a lista de tours extraidos do site https://explorecalifornia.org/tours.htm.
+
+O intuito desse projeto é estudar e aplicar noções básicas de criação de uma Web RestAPI integrada a um banco de dados MongoDB. 
 
 
 <h2>💻 Tecnologias</h2>
