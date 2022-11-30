@@ -1,24 +1,37 @@
 package com.group.artifact.domain;
 
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Objects;
 
-@Entity
+@Document
 public class TourRating {
 
-    @EmbeddedId
-    private TourRatingPk pk;
+    @Id
+    private String id;
 
-    @Column(nullable = false)
+    private String tourId;
+
+    @NotNull
+    private Integer customerId;
+
+    @Min(0)
+    @Max(5)
     private Integer score;
 
-    @Column
+    @Size(max = 255)
     private String comment;
 
-    public TourRating(TourRatingPk pk, Integer score, String comment) {
-        this.pk = pk;
+    public TourRating(String id, String tourId, Integer customerId, Integer score, String comment) {
+        this.id = id;
+        this.tourId = tourId;
+        this.customerId = customerId;
         this.score = score;
         this.comment = comment;
     }
@@ -26,27 +39,28 @@ public class TourRating {
     protected TourRating() {
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        TourRating that = (TourRating) o;
-        return Objects.equals(pk, that.pk) &&
-                Objects.equals(score, that.score) &&
-                Objects.equals(comment, that.comment);
+    public String getId() {
+        return id;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(pk, score, comment);
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public TourRatingPk getPk() {
-        return pk;
+    public String getTourId() {
+        return tourId;
     }
 
-    public void setPk(TourRatingPk pk) {
-        this.pk = pk;
+    public void setTourId(String tourId) {
+        this.tourId = tourId;
+    }
+
+    public Integer getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Integer customerId) {
+        this.customerId = customerId;
     }
 
     public Integer getScore() {
@@ -66,9 +80,24 @@ public class TourRating {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TourRating rating = (TourRating) o;
+        return Objects.equals(id, rating.id) && Objects.equals(tourId, rating.tourId) && Objects.equals(customerId, rating.customerId) && Objects.equals(score, rating.score) && Objects.equals(comment, rating.comment);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, tourId, customerId, score, comment);
+    }
+
+    @Override
     public String toString() {
         return "TourRating{" +
-                "pk=" + pk +
+                "id='" + id + '\'' +
+                ", tourId='" + tourId + '\'' +
+                ", customerId=" + customerId +
                 ", score=" + score +
                 ", comment='" + comment + '\'' +
                 '}';
