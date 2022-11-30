@@ -5,10 +5,10 @@
 <h2>💻 Tecnologias</h2>
 
 #### Java
-    📕 RESTApi
-<br>📕 Spring Data
-<br>📕 Spring MVC
-<br>📕 JPA
+📕 RESTApi<br>
+📕 Spring Data<br>
+📕 Spring MVC<br>
+📕 JPA
 
 
 #### SQL (Banco)
