@@ -2,6 +2,11 @@
   <br>⛺Explore California Web API
 </h1>
 
+<h2>💡 Objetivo</h2>
+
+Criar microsserviço para disponibilizar os pacotes e a lista de tours extraidos do site https://explorecalifornia.org/tours.htm.
+
+
 <h2>💻 Tecnologias</h2>
 
 #### Java
