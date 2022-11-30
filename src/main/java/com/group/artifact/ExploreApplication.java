@@ -2,12 +2,9 @@ package com.group.artifact;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.group.artifact.domain.Difficulty;
-import com.group.artifact.domain.Region;
 import com.group.artifact.service.TourPackageService;
 import com.group.artifact.service.TourService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,6 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 import static com.fasterxml.jackson.annotation.PropertyAccessor.FIELD;
@@ -59,23 +57,22 @@ public class ExploreApplication implements CommandLineRunner {
 	}
 
 	private void createTour(String fileToImport) throws IOException{
-		TourFromFile.read(fileToImport).forEach(importedTour ->
-				tourService.createTour(importedTour.getTitle(),
-						importedTour.getDescription(),
-						importedTour.getBlurb(),
-						importedTour.getPrice(),
-						importedTour.getLength(),
-						importedTour.getBullets(),
-						importedTour.getKeywords(),
-						importedTour.getPackageType(),
-						importedTour.getDifficulty(),
-						importedTour.getRegion()));
+		TourFromFile.read(fileToImport).forEach(tourFromFile ->
+				tourService.createTour(tourFromFile.getTitle(), tourFromFile.getPackageName(), tourFromFile.getDetails()));
 	}
 
 	private static class TourFromFile {
 		//fields
-		private String packageType, title, description, blurb, price, length,
-				bullets, keywords, difficulty, region;
+		String title;
+		String packageName;
+		Map<String, String> details;
+
+		TourFromFile(Map<String, String> record){
+			this.title = record.get("title");
+			this.packageName = record.get("packageType");
+			this.details = record;
+		}
+
 
 		//reader
 		static List<TourFromFile> read(String fileToImport) throws IOException {
@@ -87,25 +84,11 @@ public class ExploreApplication implements CommandLineRunner {
 		protected TourFromFile() {
 		}
 
-		String getPackageType() { return packageType; }
-
 		String getTitle() { return title; }
 
-		String getDescription() { return description; }
+		String getPackageName() { return packageName; }
 
-		String getBlurb() { return blurb; }
-
-		Integer getPrice() { return Integer.parseInt(price); }
-
-		String getLength() { return length; }
-
-		String getBullets() { return bullets; }
-
-		String getKeywords() { return keywords; }
-
-		Difficulty getDifficulty() { return Difficulty.valueOf(difficulty); }
-
-		Region getRegion() { return Region.findByLabel(region); }
+		Map<String, String> getDetails() { return details; }
 
 	}
 
