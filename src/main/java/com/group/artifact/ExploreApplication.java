@@ -13,6 +13,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 import static com.fasterxml.jackson.annotation.PropertyAccessor.FIELD;
@@ -34,17 +35,15 @@ public class ExploreApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
-		createTourPackage();
-
-		long numOfPackages = tourPackageService.total();
-
-		createTour("ExploreCalifornia.json");
-		long numOfTours = tourService.total();
+		createTourAllPackages();
+		createTours("ExploreCalifornia.json");
 
 	}
 
-
-	private void createTourPackage() {
+	/**
+	 * Initialize all the known tour packages
+	 */
+	private void createTourAllPackages(){
 		tourPackageService.createTourPackage("BC", "Backpack Cal");
 		tourPackageService.createTourPackage("CC", "California Calm");
 		tourPackageService.createTourPackage("CH", "California Hot springs");
@@ -56,41 +55,55 @@ public class ExploreApplication implements CommandLineRunner {
 		tourPackageService.createTourPackage("TC", "Taste of California");
 	}
 
-	private void createTour(String fileToImport) throws IOException{
+	/**
+	 * Create tour entities from an external file
+	 */
+	private void createTours(String fileToImport) throws IOException {
 		TourFromFile.read(fileToImport).forEach(tourFromFile ->
-				tourService.createTour(tourFromFile.getTitle(), tourFromFile.getPackageName(), tourFromFile.getDetails()));
+				tourService.createTour(tourFromFile.getTitle(),
+						tourFromFile.getPackageName(), tourFromFile.getDetails())
+		);
 	}
 
+	/**
+	 * Helper class to import ExploreCalifornia.json for a MongoDb Document.
+	 * Only interested in the title and package name, the remaining fields
+	 * are a collection of key-value pairs
+	 *
+	 */
 	private static class TourFromFile {
 		//fields
 		String title;
 		String packageName;
 		Map<String, String> details;
 
-		TourFromFile(Map<String, String> record){
-			this.title = record.get("title");
+		TourFromFile(Map<String, String> record) {
+			this.title =  record.get("title");
 			this.packageName = record.get("packageType");
 			this.details = record;
+			this.details.remove("packageType");
+			this.details.remove("title");
 		}
-
-
 		//reader
 		static List<TourFromFile> read(String fileToImport) throws IOException {
-			return new ObjectMapper().setVisibility(FIELD, ANY).
-					readValue(new FileInputStream(fileToImport), new TypeReference<List<TourFromFile>>() {
-					});
+			List<Map<String, String>> records = new ObjectMapper().setVisibility(FIELD, ANY).
+					readValue(new FileInputStream(fileToImport),
+							new TypeReference<List<Map<String, String>>>() {});
+			return records.stream().map(TourFromFile::new)
+					.collect(Collectors.toList());
 		}
 
-		protected TourFromFile() {
+		String getTitle() {
+			return title;
 		}
 
-		String getTitle() { return title; }
+		String getPackageName() {
+			return packageName;
+		}
 
-		String getPackageName() { return packageName; }
-
-		Map<String, String> getDetails() { return details; }
-
+		Map<String, String> getDetails() {
+			return details;
+		}
 	}
-
 }
 

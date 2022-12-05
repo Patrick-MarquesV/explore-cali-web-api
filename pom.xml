@@ -11,8 +11,8 @@
 	<groupId>com.group</groupId>
 	<artifactId>artifact</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>name</name>
-	<description>First Spring Boot project</description>
+	<name>exploreCali</name>
+	<description>Explore Cali Web API</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
@@ -24,6 +24,7 @@
 		<dependency>
 			<groupId>de.flapdoodle.embed</groupId>
 			<artifactId>de.flapdoodle.embed.mongo</artifactId>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
